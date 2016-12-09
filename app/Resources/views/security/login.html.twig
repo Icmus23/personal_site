@@ -1,0 +1,10 @@
+{% extends 'menu.html.twig' %}
+
+{% block body %}
+    <form action="{{ path('login') }}" method="post">
+        <input type="text" placeholder="Username" name="_username">
+        <input type="password" placeholder="Password" name="_password">
+
+        <input type="submit" value="Вход">
+    </form>
+{% endblock %}
