@@ -1,5 +1,38 @@
 {% extends 'menu.html.twig' %}
 
 {% block body %}
+    <style type="text/css">
+        .posts-table {
+            border-collapse: collapse;
+        }
+        .posts-table td {
+             border: 1px solid black;
+        }
+    </style>
     <h3>Blog</h3>
+    <table class="posts-table">
+        <thead>
+            <tr>
+                <td>Post Id</td>
+                <td>Title</td>
+                <td>Subtitle</td>
+                <td>Text</td>
+                <td>Active</td>
+                <td>Created</td>
+                <td>Updated</td>
+            </tr>
+        </thead>
+        {% for post in posts %}
+            <tr>
+                <td>{{ post.id }}</td>
+                <td>{{ post.title }}</td>
+                <td>{{ post.subtitle }}</td>
+                <td>{{ post.text }}</td>
+                <td>{{ post.active ? 'Yes' : 'No' }}</td>
+                <td>{{ post.created|date("H:i:s, d.m.Y") }}</td>
+                <td>{{ post.updated|date("H:i:s, d.m.Y") }}</td>
+            </tr>
+        {% endfor %}
+        <tr></tr>
+    </table>
 {% endblock %}
