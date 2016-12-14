@@ -61,4 +61,25 @@ class AdminController extends Controller
 
         return $this->redirectToRoute('admin_blog');
     }
+
+    /**
+     * @Route("/admin/blog/delete_post/{id}", name="admin_delete_post")
+     * @Method({"POST"})
+     * @Security("has_role('ROLE_ADMIN')")
+     */
+    public function deletePostAction($id)
+    {
+        $repository = $this->getDoctrine()->getRepository('AppBundle:Post');
+        $post = $repository->find($id);
+
+        if (!$post) {
+            throw $this->createNotFoundException('There is no post with that Id!');
+        }
+
+        $em = $this->getDoctrine()->getManager();
+        $em->remove($post);
+        $em->flush();
+
+        return $this->redirectToRoute('blog');
+    }
 }

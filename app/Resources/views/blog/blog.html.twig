@@ -20,6 +20,7 @@
                 <td>Active</td>
                 <td>Created</td>
                 <td>Updated</td>
+                <td>Delete</td>
             </tr>
         </thead>
         {% for post in posts %}
@@ -31,6 +32,11 @@
                 <td>{{ post.active ? 'Yes' : 'No' }}</td>
                 <td>{{ post.created|date("H:i:s, d.m.Y") }}</td>
                 <td>{{ post.updated|date("H:i:s, d.m.Y") }}</td>
+                <td>
+                    <form method="post" action="{{ path('admin_delete_post', { 'id' : post.id }) }}">
+                        <input onclick="if (!confirm('Delete post?')) { return false; }" type="submit" value="Delete Post">
+                    </form>
+                </td>
             </tr>
         {% endfor %}
         <tr></tr>
