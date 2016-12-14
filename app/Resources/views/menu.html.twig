@@ -2,14 +2,24 @@
 
 {% block menu %}
     <ul>
-        <li><a href="{{ path('main') }}">Main</a></li>
-        <li><a href="{{ path('blog') }}">Blog</a></li>
-        <li><a href="{{ path('portfolio') }}">Portfolio</a></li>
+        <li>
+            <a href="{{ path('main') }}">Main</a>
+        </li>
+        <li>
+            <a href="{{ path('blog') }}">Blog</a>
+        </li>
+        <li>
+            <a href="{{ path('portfolio') }}">Portfolio</a>
+        </li>
         {% if is_granted('ROLE_ADMIN') %}
-            <li><a href="{{ path('admin') }}">Админка</a></li>
+            <li>
+                <a href="{{ path('admin') }}">Admin</a>
+            </li>
         {% endif %}
         {% if is_granted('IS_AUTHENTICATED_FULLY') %}
-            <li><a href="{{ path('logout') }}">Выход</a></li>
+            <li>
+                <a href="{{ path('logout') }}">Exit</a>
+            </li>
         {% endif %}
     </ul>
 {% endblock %}
