@@ -3,6 +3,7 @@
 namespace AppBundle\Controller;
 
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use AppBundle\Entity\Post;
 use Symfony\Component\HttpFoundation\Response;
@@ -11,6 +12,7 @@ class BlogController extends Controller
 {
     /**
      * @Route("/blog", name="blog")
+     * @Method({"GET"})
      */
     public function blogAction()
     {
@@ -28,27 +30,5 @@ class BlogController extends Controller
                 'posts' => $posts
             ]
         );
-    }
-
-    /**
-     * @Route("/add_post")
-     */
-    public function addPostAction()
-    {
-        $em = $this->getDoctrine()->getManager();
-
-        $post = new Post();
-        $post->setTitle('Second Blog Post');
-        $post->setSubtitle('Second Blog Post in upcomming renew site');
-        $post->setText('Blog post text, describes a lot of interesting stuff');
-        $post->setActive(false);
-        $post->setCreated(new \DateTime("now"));
-        $post->setUpdated(new \DateTime("now"));
-
-        $em->persist($post);
-
-        $em->flush();
-
-        return new Response();
     }
 }
