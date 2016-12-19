@@ -16,13 +16,7 @@ class BlogController extends Controller
      */
     public function blogAction()
     {
-        $repository = $this->getDoctrine()->getRepository('AppBundle:Post');
-
-        $posts = $repository->findBy(
-            [
-                'active' => true
-            ]
-        );
+        $posts = $this->get('post_service')->getAllActivePosts();
 
         return $this->render(
             'blog/blog.html.twig',

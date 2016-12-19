@@ -29,7 +29,7 @@ class AdminController extends Controller
      */
     public function blogAction()
     {
-        $posts = $this->getDoctrine()->getRepository('AppBundle:Post')->findAll();
+        $posts = $this->get('post_service')->getAllPosts();
 
         $postForm = $this->createForm(PostForm::class);
 
@@ -59,7 +59,7 @@ class AdminController extends Controller
         if ($form->isSubmitted() && $form->isValid()) {
             $post->setCreated(new \DateTime("now"));
 
-            $this->savePost($post);
+            $this->get('post_service')->savePost($post);
         }
 
         return $this->redirectToRoute('admin_blog');
@@ -74,7 +74,7 @@ class AdminController extends Controller
      */
     public function deletePostAction($id)
     {
-        $post = $this->getPostById($id);
+        $post = $this->get('post_service')->getPostById($id);
 
         $em = $this->getDoctrine()->getManager();
         $em->remove($post);
@@ -92,7 +92,7 @@ class AdminController extends Controller
      */
     public function editPostAction($id)
     {
-        $post = $this->getPostById($id);
+        $post = $this->get('post_service')->getPostById($id);
 
         $form = $this->createForm(PostForm::class, $post);
 
@@ -114,7 +114,7 @@ class AdminController extends Controller
      */
     public function updatePostAction($id, Request $request)
     {
-        $post = $this->getPostById($id);
+        $post = $this->get('post_service')->getPostById($id);
         $form = $this->createForm(PostForm::class, $post);
 
         $form->handleRequest($request);
@@ -122,40 +122,9 @@ class AdminController extends Controller
         if ($form->isSubmitted() && $form->isValid()) {
             $post->setUpdated(new \DateTime("now"));
 
-            $this->savePost($post);
+            $this->get('post_service')->savePost($post);
         }
 
         return $this->redirectToRoute('admin_blog');
-    }
-
-    /**
-     * Getting post with $id
-     *
-     * @param int $id
-     * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException
-     * @return Post|object
-     */
-    private function getPostById($id)
-    {
-        $repository = $this->getDoctrine()->getRepository('AppBundle:Post');
-        $post = $repository->find($id);
-
-        if (!$post) {
-            throw $this->createNotFoundException('There is no post with that Id!');
-        }
-
-        return $post;
-    }
-
-    /**
-     * Saving post object to DB
-     *
-     * @param Post $post
-     */
-    private function savePost(Post $post)
-    {
-        $em = $this->getDoctrine()->getManager();
-        $em->persist($post);
-        $em->flush();
     }
 }
