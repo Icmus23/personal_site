@@ -3,22 +3,22 @@
 {% block menu %}
     <ul>
         <li>
-            <a href="{{ path('main') }}">Main</a>
+            <a href="{{ path('main') }}">{{ 'Main'|trans }}</a>
         </li>
         <li>
-            <a href="{{ path('blog') }}">Blog</a>
+            <a href="{{ path('blog') }}">{{ 'Blog'|trans }}</a>
         </li>
         <li>
-            <a href="{{ path('portfolio') }}">Portfolio</a>
+            <a href="{{ path('portfolio') }}">{{ 'Portfolio'|trans }}</a>
         </li>
         {% if is_granted('ROLE_ADMIN') %}
             <li>
-                <a href="{{ path('admin') }}">Admin</a>
+                <a href="{{ path('admin') }}">{{ 'Admin'|trans }}</a>
             </li>
         {% endif %}
         {% if is_granted('IS_AUTHENTICATED_FULLY') %}
             <li>
-                <a href="{{ path('logout') }}">Exit</a>
+                <a href="{{ path('logout') }}">{{ 'Exit'|trans }}</a>
             </li>
         {% endif %}
     </ul>
