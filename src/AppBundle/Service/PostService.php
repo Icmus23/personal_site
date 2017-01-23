@@ -4,6 +4,7 @@ namespace AppBundle\Service;
 
 use Doctrine\ORM\EntityManager;
 use AppBundle\Entity\Post;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class PostService
 {
@@ -38,7 +39,7 @@ class PostService
         $post = $repository->find($id);
 
         if (!$post) {
-            throw $this->createNotFoundException('There is no post with that Id!');
+            throw new NotFoundHttpException('There is no post with that Id!');
         }
 
         return $post;
