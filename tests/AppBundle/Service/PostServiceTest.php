@@ -4,7 +4,7 @@ namespace Tests\AppBundle\Service;
 
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use AppBundle\Entity\Post;
-use AppBundle\Service\PostService;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class PostServiceTest extends KernelTestCase
 {
@@ -16,10 +16,6 @@ class PostServiceTest extends KernelTestCase
     protected function setUp()
     {
         self::bootKernel();
-
-        $this->em = static::$kernel->getContainer()
-            ->get('doctrine')
-            ->getManager();
     }
 
     /**
@@ -28,9 +24,6 @@ class PostServiceTest extends KernelTestCase
     protected function tearDown()
     {
         parent::tearDown();
-
-        $this->em->close();
-        $this->em = null; // avoid memory leaks
     }
 
     public function testGetPostById()
@@ -38,5 +31,12 @@ class PostServiceTest extends KernelTestCase
         $post = static::$kernel->getContainer()->get('post_service')->getPostById(3);
 
         $this->assertEquals(Post::class, get_class($post));
+    }
+
+    public function testGetPostByIdWithWrongId()
+    {
+        $this->setExpectedException(NotFoundHttpException::class);
+
+        $post = static::$kernel->getContainer()->get('post_service')->getPostById(1231312);
     }
 }
