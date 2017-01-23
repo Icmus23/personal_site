@@ -14,7 +14,11 @@ class BlogController extends Controller
      */
     public function blogAction()
     {
-        $posts = $this->get('post_service')->getAllActivePosts();
+        if ($this->get('security.authorization_checker')->isGranted('ROLE_ADMIN')) {
+            $posts = $this->get('post_service')->getAllPosts();
+        } else {
+            $posts = $this->get('post_service')->getAllActivePosts();
+        }
 
         return $this->render(
             'blog/blog.html.twig',
