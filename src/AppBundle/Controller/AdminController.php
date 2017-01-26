@@ -34,7 +34,7 @@ class AdminController extends Controller
         $postForm = $this->createForm(PostForm::class);
 
         return $this->render(
-            'admin/blog/blog.html.twig',
+            'admin/blog/main.html.twig',
             [
                 'add_post_form' => $postForm->createView(),
                 'posts' => $posts
@@ -126,5 +126,18 @@ class AdminController extends Controller
         }
 
         return $this->redirectToRoute('admin_blog');
+    }
+
+    /**
+     * @Route("/admin/portfolio", name="admin_portfolio")
+     * @Method({"GET"})
+     * @Security("has_role('ROLE_ADMIN')")
+     */
+    public function portfolioAction()
+    {
+        return $this->render(
+            'admin/portfolio/main.html.twig',
+            []
+        );
     }
 }
