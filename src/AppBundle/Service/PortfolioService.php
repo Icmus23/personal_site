@@ -9,7 +9,7 @@ use AppBundle\Service\AbstractService;
 
 class PortfolioService extends AbstractService
 {
-
+    /** @var \Doctrine\ORM\EntityRepository */
     private $repository;
 
     public function __construct(EntityManager $em)
@@ -18,11 +18,23 @@ class PortfolioService extends AbstractService
         $this->repository = $this->em->getRepository('AppBundle:Portfolio');
     }
 
+    /**
+     * Get all portfolio elements
+     *
+     * @return array
+     */
     public function getAllPortfolio()
     {
         return $this->repository->findAll();
     }
 
+    /**
+     * Get portfolio by Id
+     *
+     * @param int $id
+     * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException
+     * @return Portfolio|object
+     */
     public function getPortfolioById($id)
     {
         $portfolio = $this->repository->find($id);

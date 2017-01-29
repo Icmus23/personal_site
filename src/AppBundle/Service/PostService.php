@@ -9,17 +9,25 @@ use AppBundle\Service\AbstractService;
 
 class PostService extends AbstractService
 {
+    /** @var \Doctrine\ORM\EntityRepository */
+    private $repository;
+
+    public function __construct(EntityManager $em)
+    {
+        parent::__construct($em);
+        $this->repository = $this->em->getRepository('AppBundle:Post');
+    }
+
     /**
-     * Getting post with $id
+     * Getting post by $id
      *
      * @param int $id
      * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException
-     * @return Post|object
+     * @return Post|Object
      */
     public function getPostById($id)
     {
-        $repository = $this->em->getRepository('AppBundle:Post');
-        $post = $repository->find($id);
+        $post = $this->repository->find($id);
 
         if (!$post) {
             throw new NotFoundHttpException('There is no post with that Id!');
@@ -35,7 +43,7 @@ class PostService extends AbstractService
      */
     public function getAllPosts()
     {
-        return $this->em->getRepository('AppBundle:Post')->findAll();
+        return $this->repository->findAll();
     }
 
     /**
@@ -45,9 +53,7 @@ class PostService extends AbstractService
      */
     public function getAllActivePosts()
     {
-        $repository = $this->em->getRepository('AppBundle:Post');
-
-        $posts = $repository->findBy(
+        $posts = $this->repository->findBy(
             [
                 'active' => true
             ]
