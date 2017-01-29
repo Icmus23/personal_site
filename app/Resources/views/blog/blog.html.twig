@@ -2,7 +2,8 @@
 
 {% block body %}
     <h3>Blog</h3>
-    <table class="posts-table">
+
+    <table class="table">
         <thead>
             <tr>
                 <td>Post Id</td>
@@ -25,21 +26,21 @@
                 <td>{{ post.subtitle }}</td>
                 <td>{{ post.text }}</td>
                 <td>{{ post.active ? 'Yes' : 'No' }}</td>
-                <td>{{ post.created|date("H:i:s, d.m.Y") }}</td>
+                <td>{{ post.created|date('H:i:s, d.m.Y') }}</td>
                 <td>
                     {% if post.updated is null %}
                         -
                     {% else %}
-                        {{ post.updated|date("H:i:s, d.m.Y") }}
+                        {{ post.updated|date('H:i:s, d.m.Y') }}
                     {% endif %}
                 </td>
                 {% if is_granted("ROLE_ADMIN") %}
                     <td>
-                        <a href="{{ path('admin_edit_post', { 'id' : post.id }) }}">Edit Post</a>
+                        <a href="{{ path('admin_edit_post', { 'id' : post.id }) }}">Edit</a>
                     </td>
                     <td>
                         <form method="post" action="{{ path('admin_delete_post', { 'id' : post.id }) }}">
-                            <input onclick="if (!confirm('Delete post?')) { return false; }" type="submit" value="Delete Post">
+                            <input onclick="if (!confirm('Delete post?')) { return false; }" type="submit" value="Delete">
                         </form>
                     </td>
                 {% endif %}

@@ -9,7 +9,9 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 //use Symfony\Component\HttpFoundation\Response;
 use AppBundle\Form\Post as PostForm;
+use AppBundle\Form\Portfolio as PortfolioForm;
 use AppBundle\Entity\Post;
+use AppBundle\Entity\Portfolio;
 
 class AdminController extends Controller
 {
@@ -59,7 +61,7 @@ class AdminController extends Controller
         if ($form->isSubmitted() && $form->isValid()) {
             $post->setCreated(new \DateTime("now"));
 
-            $this->get('post_service')->savePost($post);
+            $this->get('app_service')->saveEntity($post);
         }
 
         return $this->redirectToRoute('admin_blog');
@@ -122,10 +124,10 @@ class AdminController extends Controller
         if ($form->isSubmitted() && $form->isValid()) {
             $post->setUpdated(new \DateTime("now"));
 
-            $this->get('post_service')->savePost($post);
+            $this->get('app_service')->saveEntity($post);
         }
 
-        return $this->redirectToRoute('admin_blog');
+        return $this->redirectToRoute('blog');
     }
 
     /**
@@ -135,9 +137,99 @@ class AdminController extends Controller
      */
     public function portfolioAction()
     {
+        $portfolioForm = $this->createForm(PortfolioForm::class);
+
         return $this->render(
             'admin/portfolio/main.html.twig',
-            []
+            [
+                'portfolio_form' => $portfolioForm->createView()
+            ]
         );
+    }
+
+    /**
+     * @Route("/admin/portfolio")
+     * @Method({"POST"})
+     * @Security("has_role('ROLE_ADMIN')")
+     */
+    public function addPortfolioAction(Request $request)
+    {
+        $portfolio = new Portfolio();
+        $form = $this->createForm(PortfolioForm::class, $portfolio);
+
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $portfolio->setCreated(new \DateTime("now"));
+
+            $this->get('app_service')->saveEntity($portfolio);
+        }
+
+        return $this->redirectToRoute('admin_portfolio');
+    }
+
+    /**
+     * @Route("/admin/blog/edit_portfolio/{id}", name="admin_edit_portfolio")
+     * @Method({"GET"})
+     * @Security("has_role('ROLE_ADMIN')")
+     * @param int $id
+     * @return mixed
+     */
+    public function editPortfolioAction($id)
+    {
+        $portfolio = $this->get('portfolio_service')->getPortfolioById($id);
+
+        $form = $this->createForm(PortfolioForm::class, $portfolio);
+
+        return $this->render(
+            'admin/portfolio/edit.html.twig',
+            [
+                'portfolio_form' => $form->createView()
+            ]
+        );
+    }
+
+    /**
+     * @Route("/admin/blog/delete_portfolio/{id}", name="admin_delete_portfolio")
+     * @Method({"POST"})
+     * @Security("has_role('ROLE_ADMIN')")
+     * @param int $id
+     * @return mixed
+     */
+    public function deletePortfolioAction($id)
+    {
+        $portfolio = $this->get('portfolio_service')->getPortfolioById($id);
+
+        if ($portfolio) {
+            $em = $this->getDoctrine()->getManager();
+            $em->remove($portfolio);
+            $em->flush();
+        }
+
+        return $this->redirectToRoute('portfolio');
+    }
+
+    /**
+     * @Route("/admin/blog/edit_portfolio/{id}")
+     * @Method({"POST"})
+     * @Security("has_role('ROLE_ADMIN')")
+     * @param int $id
+     * @param Request $request
+     * @return mixed
+     */
+    public function updatePortfolioAction($id, Request $request)
+    {
+        $portfolio = $this->get('portfolio_service')->getPortfolioById($id);
+        $form = $this->createForm(PortfolioForm::class, $portfolio);
+
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $portfolio->setUpdated(new \DateTime("now"));
+
+            $this->get('app_service')->saveEntity($portfolio);
+        }
+
+        return $this->redirectToRoute('portfolio');
     }
 }

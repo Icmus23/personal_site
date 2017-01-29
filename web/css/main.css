@@ -1,6 +1,6 @@
-.posts-table {
+.table {
     border-collapse: collapse;
 }
-.posts-table td {
+.table td {
      border: 1px solid black;
 }

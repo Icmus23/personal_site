@@ -12,6 +12,12 @@ class PortfolioController extends Controller
      */
     public function portfolioAction()
     {
-        return $this->render('portfolio/portfolio.html.twig');
+        $allPortfolio = $this->get('portfolio_service')->getAllPortfolio();
+        return $this->render(
+            'portfolio/portfolio.html.twig',
+            [
+                'all_portfolio' => $allPortfolio
+            ]
+        );
     }
 }

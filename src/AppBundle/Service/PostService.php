@@ -5,27 +5,10 @@ namespace AppBundle\Service;
 use Doctrine\ORM\EntityManager;
 use AppBundle\Entity\Post;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use AppBundle\Service\AbstractService;
 
-class PostService
+class PostService extends AbstractService
 {
-    private $em;
-
-    public function __construct(EntityManager $em)
-    {
-        $this->em = $em;
-    }
-
-    /**
-     * Saving post object to DB
-     *
-     * @param Post $post
-     */
-    public function savePost(Post $post)
-    {
-        $this->em->persist($post);
-        $this->em->flush();
-    }
-
     /**
      * Getting post with $id
      *
