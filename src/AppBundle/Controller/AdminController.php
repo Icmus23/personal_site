@@ -12,6 +12,7 @@ use AppBundle\Form\Post as PostForm;
 use AppBundle\Form\Portfolio as PortfolioForm;
 use AppBundle\Entity\Post;
 use AppBundle\Entity\Portfolio;
+use AppBundle\Entity\Picture;
 
 class AdminController extends Controller
 {
@@ -161,8 +162,15 @@ class AdminController extends Controller
 
         if ($form->isSubmitted() && $form->isValid()) {
             $portfolio->setCreated(new \DateTime("now"));
-
             $this->get('app_service')->saveEntity($portfolio);
+
+            $files = $portfolio->getFiles();
+
+            $this->get('uploader')->uploadFiles(
+                $portfolio->getFiles(),
+                $this->getParameter('portfolio_files_upload_directory'),
+                $portfolio
+            );
         }
 
         return $this->redirectToRoute('admin_portfolio');

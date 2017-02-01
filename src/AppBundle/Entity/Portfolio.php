@@ -57,6 +57,22 @@ class Portfolio
     private $updated;
 
     /**
+     * @var Array
+     */
+    private $files = array();
+
+    public function getFiles()
+    {
+        return $this->files;
+    }
+
+    public function setFiles($files)
+    {
+        $this->files = $files;
+        return $this;
+    }
+
+    /**
      * Get id
      *
      * @return int

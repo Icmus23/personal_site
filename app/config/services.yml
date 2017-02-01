@@ -18,3 +18,7 @@ services:
     portfolio_service:
         class: AppBundle\Service\PortfolioService
         arguments: ["@doctrine.orm.entity_manager"]
+
+    uploader:
+        class: AppBundle\Service\Uploader
+        arguments: ["@doctrine.orm.entity_manager", "@app_service"]
