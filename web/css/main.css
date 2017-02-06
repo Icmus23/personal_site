@@ -4,3 +4,7 @@
 .table td {
      border: 1px solid black;
 }
+.portfolio-pictures {
+    max-height: 100px;
+    max-width: 100px;
+}

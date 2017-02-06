@@ -13,6 +13,9 @@ class PortfolioController extends Controller
     public function portfolioAction()
     {
         $allPortfolio = $this->get('portfolio_service')->getAllPortfolio();
+
+        // var_dump($allPortfolio[2]);
+
         return $this->render(
             'portfolio/portfolio.html.twig',
             [

@@ -12,6 +12,7 @@
                 <td>Url</td>
                 <td>Created</td>
                 <td>Updated</td>
+                <td>Pictures</td>
                 {% if is_granted("ROLE_ADMIN") %}
                     <td>Edit</td>
                     <td>Delete</td>
@@ -32,6 +33,11 @@
                         {% else %}
                             {{ p.updated|date("H:i:s, d.m.Y") }}
                         {% endif %}
+                    </td>
+                    <td>
+                        {% for file in p.files %}
+                            <img class="portfolio-pictures" src="{{portfolio_files_public_directory ~ file.url }}">
+                        {% endfor %}
                     </td>
                     {% if is_granted("ROLE_ADMIN") %}
                         <td>

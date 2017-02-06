@@ -20,23 +20,17 @@ class Uploader extends AbstractService
 
     public function uploadFile($file, $directory, $parent)
     {
-        // generate new filename
-        $fileName = md5(uniqid()).'.'.$file->guessExtension();
+        try {
+            // generate new filename
+            $fileName = md5(uniqid()).'.'.$file->guessExtension();
 
-        // move uploaded file to server
-        $file->move(
-            $directory,
-            $fileName
-        );
+            // move uploaded file to server
+            $file->move($directory, $fileName);
 
-        //create entity
-        $picture = new Picture();
-        $picture->setUrl($fileName);
-        $picture->setParent($parent);
-        $picture->setParentType('portfolio');
-        $picture->setCreated(new \Datetime('now'));
-
-        $this->appService->saveEntity($picture);
+            $this->createPictureEntity($fileName, $parent);
+        } catch (\Exception $e) {
+            echo $e->getMessage();
+        }
     }
 
     public function uploadFiles($files, $directory, $parent)
@@ -47,6 +41,36 @@ class Uploader extends AbstractService
                 $directory,
                 $parent
             );
+        }
+    }
+
+    /**
+     *
+     * Create Picture entity and persist it to db
+     *
+     * @param $fileName string
+     * @param $parent AppBundle\Entity\Portfolio
+     *
+     * @return AppBundle\Entity\Portfolio
+     */
+    public function createPictureEntity($fileName, $parent)
+    {
+        //create entity
+        $picture = new Picture();
+        $picture->setUrl($fileName);
+        $picture->setParent($parent);
+        $picture->setParentType('portfolio');
+        $picture->setCreated(new \Datetime('now'));
+
+        $this->appService->saveEntity($picture);
+
+        return $picture;
+    }
+
+    public function removeFile($fileName)
+    {
+        if (file_exists($fileName)) {
+            unlink($fileName);
         }
     }
 }

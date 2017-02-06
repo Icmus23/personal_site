@@ -8,8 +8,8 @@ imports:
 parameters:
     locale: en
 
-    portfolio_files_public_directory: '/web/uploads/portfolio'
-    portfolio_files_upload_directory: '%kernel.root_dir%/../%portfolio_files_public_directory%'
+    portfolio_files_public_directory: "/web/uploads/portfolio/"
+    portfolio_files_upload_directory: "%kernel.root_dir%/../%portfolio_files_public_directory%"
 
 framework:
     #esi:             ~
@@ -39,6 +39,8 @@ framework:
 twig:
     debug:            "%kernel.debug%"
     strict_variables: "%kernel.debug%"
+    globals:
+        portfolio_files_public_directory: "/uploads/portfolio/"
 
 # Doctrine Configuration
 doctrine:

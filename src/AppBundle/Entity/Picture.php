@@ -24,7 +24,7 @@ class Picture
     /**
      * @var int
      *
-     * @ORM\ManyToOne(targetEntity="Portfolio")
+     * @ORM\ManyToOne(targetEntity="Portfolio", inversedBy="files")
      */
     private $parent;
 

@@ -162,12 +162,12 @@ class AdminController extends Controller
 
         if ($form->isSubmitted() && $form->isValid()) {
             $portfolio->setCreated(new \DateTime("now"));
+            $files = $portfolio->getFiles();
+            $portfolio->setFiles([]);
             $this->get('app_service')->saveEntity($portfolio);
 
-            $files = $portfolio->getFiles();
-
             $this->get('uploader')->uploadFiles(
-                $portfolio->getFiles(),
+                $files,
                 $this->getParameter('portfolio_files_upload_directory'),
                 $portfolio
             );
@@ -209,9 +209,7 @@ class AdminController extends Controller
         $portfolio = $this->get('portfolio_service')->getPortfolioById($id);
 
         if ($portfolio) {
-            $em = $this->getDoctrine()->getManager();
-            $em->remove($portfolio);
-            $em->flush();
+            $this->get('portfolio_service')->delete($portfolio);
         }
 
         return $this->redirectToRoute('portfolio');

@@ -12,10 +12,16 @@ class PortfolioService extends AbstractService
     /** @var \Doctrine\ORM\EntityRepository */
     private $repository;
 
-    public function __construct(EntityManager $em)
+    private $uploadDirectory;
+
+    private $uploaderService;
+
+    public function __construct(EntityManager $em, $uploaderService, $uploadDirectory)
     {
         parent::__construct($em);
         $this->repository = $this->em->getRepository('AppBundle:Portfolio');
+        $this->uploadDirectory = $uploadDirectory;
+        $this->uploaderService = $uploaderService;
     }
 
     /**
@@ -44,5 +50,21 @@ class PortfolioService extends AbstractService
         }
 
         return $portfolio;
+    }
+
+    /**
+     * Delete Portfolio entity with related files
+     *
+     * @param $entity Portfolio
+     */
+    public function delete($entity)
+    {
+        foreach ($entity->getFiles() as $file) {
+            $filePath = $this->uploadDirectory.$file->getUrl();
+            $this->uploaderService->removeFile($filePath);
+            $this->em->remove($file);
+        }
+        $this->em->remove($entity);
+        $this->em->flush();
     }
 }
